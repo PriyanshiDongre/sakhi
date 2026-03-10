@@ -20,7 +20,18 @@ Thumbs.db
 # Dependencies (if using Node.js)
 node_modules/
 
-agent-backend/ai/
-venv/
-.venv/
+# 2. But DO NOT ignore these specific folders/files
+!agent-backend/ai/agent_logic.py
+!agent-backend/ai/main.py
+!agent-backend/ai/model_ml.py
+!agent-backend/ai/models.py
+!agent-backend/ai/sos_service.py
+!agent-backend/ai/voice_agent.py
+!agent-backend/ai/ML_model/
+
+# 3. Explicitly keep blocking the heavy stuff
+agent-backend/ai/Lib/
+agent-backend/ai/Include/
+agent-backend/ai/Scripts/
+agent-backend/ai/share/
 *.dll

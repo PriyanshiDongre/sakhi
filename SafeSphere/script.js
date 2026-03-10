@@ -68,10 +68,9 @@ window.toggleAuth = () => {
 
 };
 
-window.handleLogout = () => signOut(auth);
 
 ///voice start
-function startVoiceConversation() {
+window.startVoiceConversation = function () {
 
     console.log("Voice agent activated")
 
@@ -136,53 +135,74 @@ window.closeSOS = () => {
 
 };
 
+window.handleLogout = () => signOut(auth);
+navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
 
+        console.log("Microphone working")
+
+    })
+    .catch(err => {
+
+        console.error("Mic error:", err)
+
+    })
 // ---------------- VOICE AI ----------------
+const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
 
 let recognition;
 
 function startVoiceRecognition() {
 
-    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    if (!SpeechRecognition) {
+        console.log("Speech recognition not supported")
+        return
+    }
 
-    recognition.continuous = true;
-    recognition.interimResults = false;
-    recognition.lang = "en-US";
+    recognition = new SpeechRecognition()
+
+    recognition.continuous = true
+    recognition.interimResults = false
+    recognition.lang = "en-US"
+
+    recognition.onstart = () => {
+        console.log("Voice recognition started")
+    }
 
     recognition.onresult = async (event) => {
 
-        const command = event.results[event.results.length - 1][0].transcript.toLowerCase();
+        const command =
+            event.results[event.results.length - 1][0].transcript.toLowerCase()
 
-        console.log("Heard:", command);
+        console.log("Heard:", command)
 
-        try {
+        if (command.includes("help")) {
+
+            console.log("HELP detected")
 
             const res = await fetch(
-                "http://127.0.0.1:8000/voice/command?command=" + encodeURIComponent(command),
+                "http://127.0.0.1:8000/voice/command?command=help",
                 { method: "POST" }
-            );
+            )
 
-            const data = await res.json();
+            const data = await res.json()
 
-            speak(data.response);
-
-        } catch (err) {
-
-            console.error("Backend error:", err);
+            speak(data.response)
 
         }
 
-    };
+    }
 
-    recognition.onerror = (event) => {
-        console.log("Speech error:", event.error);
-    };
+    recognition.onerror = (e) => {
+        console.log("Speech error:", e.error)
+    }
 
     recognition.onend = () => {
-        recognition.start();
-    };
+        recognition.start()
+    }
 
-    recognition.start();
+    recognition.start()
 
 }
 
@@ -217,25 +237,26 @@ function startVisualizer() {
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(stream => {
+    navigator.geolocation.watchPosition(
 
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            analyser = audioCtx.createAnalyser();
+        position => {
 
-            const source = audioCtx.createMediaStreamSource(stream);
+            const lat = position.coords.latitude
+            const lng = position.coords.longitude
 
-            source.connect(analyser);
+            sendLocationToBackend(lat, lng)
 
-            analyser.fftSize = 256;
-            dataArray = new Uint8Array(analyser.frequencyBinCount);
+        },
 
-            drawWaves();
+        error => console.log(error),
 
-        })
-        .catch(err => {
-            console.log("Microphone unavailable, visualizer disabled");
-        });
+        {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 5000
+        }
+
+    )
 
 }
 
@@ -280,47 +301,40 @@ function startLocationMonitoring() {
 
         position => {
 
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
+            const lat = position.coords.latitude
+            const lng = position.coords.longitude
 
-            console.log("Location:", lat, lng);
-
-            sendLocationToBackend(lat, lng);
+            sendLocationToBackend(lat, lng)
 
         },
 
         error => console.log(error),
 
-        { enableHighAccuracy: true }
+        {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 5000
+        }
 
     );
-
 }
 
 
 // ---------------- AGENT RESPONSE ----------------
 
 function handleAgentResponse(data) {
-    if (data.action === "start_voice_agent") {
 
-        speak(data.message)
-
-        startVoiceConversation()
-
-    }
-    console.log("Agent Response:", data);
-
-    if (data.action === "ask_if_safe") speak(data.message);
-
-    if (data.action === "danger_vehicle") {
-        speak(data.message);
-        triggerSOS();
-    }
-
-    if (data.action === "guide_user") speak(data.message);
     console.log("Agent Response:", data)
-}
 
+    if (data.message) {
+        speak(data.message)
+    }
+
+    if (data.action === "start_voice_agent") {
+        startVoiceConversation()
+    }
+
+}
 
 // ---------------- SEND LOCATION ----------------
 
