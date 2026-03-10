@@ -1,0 +1,61 @@
+:root {
+    --primary-glow: #00d2ff;
+    --danger-glow: #ff0055;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --font-header: 'Orbitron', sans-serif;
+}
+
+body { margin: 0; background: #050505; color: white; font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; }
+
+/* BACKGROUND ANIMATION */
+.glow-orb { position: absolute; width: 500px; height: 500px; border-radius: 50%; filter: blur(100px); z-index: -1; opacity: 0.25; }
+#orb-1 { background: var(--primary-glow); top: -100px; right: -100px; }
+#orb-2 { background: #480ca8; bottom: -100px; left: -100px; }
+
+/* GLASSMORPHISM UI */
+.glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 40px; width: 360px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100; box-shadow: 0 8px 32px rgba(0,0,0,0.8); }
+
+.input-group { position: relative; margin-bottom: 25px; }
+.input-group input { width: 100%; padding: 10px 0; background: none; border: none; border-bottom: 1px solid #333; color: white; outline: none; transition: 0.3s; }
+.input-group label { position: absolute; left: 0; top: 10px; color: #777; transition: 0.3s; pointer-events: none; }
+.input-group input:focus ~ label, .input-group input:not(:placeholder-shown) ~ label { top: -18px; font-size: 12px; color: var(--primary-glow); }
+.input-group input:focus { border-bottom: 1px solid var(--primary-glow); }
+
+.glow-btn { width: 100%; padding: 14px; background: white; border: none; border-radius: 10px; font-family: var(--font-header); font-weight: bold; cursor: pointer; transition: 0.3s; }
+.glow-btn:hover { box-shadow: 0 0 20px var(--primary-glow); transform: translateY(-2px); }
+
+/* DASHBOARD */
+.top-nav { display: flex; justify-content: space-between; padding: 15px 40px; border-bottom: 1px solid var(--glass-border); align-items: center; background: rgba(0,0,0,0.4); }
+.app-container { display: flex; height: calc(100vh - 75px); }
+.control-panel { width: 320px; padding: 25px; background: rgba(255,255,255,0.02); border-right: 1px solid var(--glass-border); }
+
+.risk-circle { width: 110px; height: 110px; border: 4px solid var(--glass-border); border-top-color: var(--primary-glow); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 25px auto; }
+.tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+.tool-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 20px; border-radius: 15px; color: white; cursor: pointer; transition: 0.3s; text-align: center; }
+.tool-card:hover { border-color: var(--primary-glow); background: rgba(0, 210, 255, 0.1); }
+
+.hyper-sos { width: 100%; margin-top: 30px; padding: 18px; border-radius: 15px; border: none; background: var(--danger-glow); color: white; font-family: var(--font-header); font-weight: bold; cursor: pointer; animation: sosPulse 2s infinite; }
+@keyframes sosPulse { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.8); } 70% { box-shadow: 0 0 0 15px rgba(255, 0, 85, 0); } }
+
+/* MAP & VISUALS */
+.map-container { flex-grow: 1; position: relative; padding: 25px; background: #070707; }
+#map-mockup { width: 100%; height: 100%; border-radius: 25px; border: 1px solid #222; position: relative; overflow: hidden; background: radial-gradient(#1a1a1a 1px, transparent 1px); background-size: 40px 40px; }
+
+#visualizer { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.5; pointer-events: none; }
+#path-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+#safe-path-line { filter: drop-shadow(0 0 12px var(--primary-glow)); transition: stroke-dashoffset 4s ease-in-out; }
+
+.user-pointer { width: 16px; height: 16px; background: var(--primary-glow); border-radius: 50%; position: absolute; top: 80%; left: 20%; box-shadow: 0 0 20px var(--primary-glow); z-index: 5; }
+.destination-point { width: 16px; height: 16px; background: #00ff88; border-radius: 50%; position: absolute; top: 20%; left: 70%; box-shadow: 0 0 20px #00ff88; z-index: 4; }
+
+/* OVERLAYS */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.96); backdrop-filter: blur(15px); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+.phone-screen { background: #111; padding: 60px; border-radius: 50px; border: 2px solid #333; text-align: center; animation: ringShake 0.5s infinite; }
+@keyframes ringShake { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(4deg); } 75% { transform: rotate(-4deg); } }
+
+.blink { animation: blinker 0.8s linear infinite; color: #ff0055; font-size: 2rem; }
+@keyframes blinker { 50% { opacity: 0; } }
+
+.pulse-dot { width: 12px; height: 12px; background: #00ff88; border-radius: 50%; display: inline-block; margin-right: 10px; box-shadow: 0 0 12px #00ff88; animation: pulseGreen 1.5s infinite; }
+@keyframes pulseGreen { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }

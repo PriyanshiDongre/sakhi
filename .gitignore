@@ -1,0 +1,26 @@
+# Secrets & Config
+config.js
+.env
+.env.*
+
+# Python Virtual Environments
+venv/
+.venv/
+env/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+
+# IDE / System files
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Dependencies (if using Node.js)
+node_modules/
+
+agent-backend/ai/
+venv/
+.venv/
+*.dll

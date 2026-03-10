@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeSphere AI | Neural Safety Network</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00d2ff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('SafeSphere PWA: Online'))
+            .catch(err => console.log('PWA Registration Failed', err));
+        });
+      }
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500&display=swap" rel="stylesheet">
+</head>
+
+<body class="auth-page">
+
+    <div class="glow-orb" id="orb-1"></div>
+    <div class="glow-orb" id="orb-2"></div>
+
+    <div id="auth-wrapper" class="glass-card">
+        <div class="auth-header">
+            <div class="logo">SAFESPHERE <span class="ai-badge">AI</span></div>
+            <p id="auth-subtitle">Neural Safety Network Initializing...</p>
+        </div>
+        <div class="auth-form">
+            <h2 id="auth-title">Operator Login</h2>
+            <div class="input-group">
+                <input type="email" id="auth-email" placeholder=" " required>
+                <label>Email Address</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="auth-password" placeholder=" " required>
+                <label>Access Key</label>
+            </div>
+            <button id="login-btn" class="glow-btn" onclick="handleSignIn()">AUTHORIZE LOGIN</button>
+            <button id="signup-btn" class="glow-btn" onclick="handleSignUp()" style="display:none;">INITIALIZE JOIN</button>
+            <p id="toggle-text" class="switch-link" onclick="toggleAuth()">New Operator? <span>Sign Up</span></p>
+        </div>
+    </div>
+
+    <main id="dashboard" style="display: none;">
+        <nav class="top-nav">
+            <div class="logo-small">SAFESPHERE <span>AI CORE</span></div>
+            <div class="system-stats">
+                <span id="voice-indicator" class="pulse-dot"></span> 
+                <span id="voice-status">AI Listening...</span>
+                <span id="clock" class="digital-time">00:00:00</span>
+            </div>
+            <button class="logout-link" onclick="handleLogout()">LOGOUT</button>
+        </nav>
+
+        <div class="app-container">
+            <aside class="control-panel">
+                <div class="status-card">
+                    <h3>Risk Analysis</h3>
+                    <div class="risk-circle">
+                        <span id="risk-percent">--%</span>
+                        <small>Local Risk</small>
+                    </div>
+                </div>
+                <div class="tool-grid">
+                    <button class="tool-card" onclick="simulateRoute()">📍 <span>Safe Path</span></button>
+                    <button class="tool-card" onclick="startFakeCall()">📞 <span>Ghost Call</span></button>
+                </div>
+                <button class="hyper-sos" onclick="triggerSOS()">SIGNAL EMERGENCY</button>
+            </aside>
+
+            <section class="map-container">
+                <div id="map-mockup">
+                    <canvas id="visualizer"></canvas>
+                    
+                    <svg id="path-svg" viewBox="0 0 1000 500" preserveAspectRatio="none">
+                        <path id="safe-path-line" d="" fill="none" stroke="#00d2ff" stroke-width="4" stroke-dasharray="2000" stroke-dashoffset="2000" />
+                    </svg>
+                    
+                    <div class="user-pointer" id="userIcon"></div>
+                    <div class="destination-point" id="destPoint" style="display:none;"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="sos-overlay" class="overlay" style="display:none;">
+        <div class="sos-box">
+            <h1 class="blink">CRITICAL ALERT ACTIVE</h1>
+            <div class="terminal-text">
+                <p>> Voice Trigger Recognized...</p>
+                <p>> Saving Audio: <span id="file-id">CAPTURING...</span></p>
+                <p style="color: #00ff88;">> GPS Location Secured.</p>
+                <p style="color: #00ff88;">> Contacts Alerted: Mom, Dad (Primary)</p>
+            </div>
+            <button class="abort-btn" onclick="closeSOS()">ABORT SIGNAL</button>
+        </div>
+    </div>
+
+    <div id="call-overlay" class="overlay" style="display:none;">
+        <div class="phone-screen">
+            <div class="caller">Mom ❤️</div>
+            <p>Incoming Ghost Call...</p>
+            <div class="call-btns">
+                <div class="btn-decline" onclick="closeCall()">✖</div>
+                <div class="btn-accept" onclick="closeCall()">✔</div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="ringtone" loop preload="auto">
+        <source src="https://www.soundjay.com/phone/phone-calling-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

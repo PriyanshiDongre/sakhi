@@ -1,0 +1,6 @@
+setup the environment - python -m venv ai
+activate env - ai\Scripts\Activate
+installing dependencies - pip install livekit-agents livekit-plugins-openai livekit-plugins-silero python-dotenv
+run python
+if error then run - python>import livekit.agents>print(dir(livekit.agents))
+groq+llama + deepgram
